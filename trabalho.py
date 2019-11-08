@@ -2,27 +2,31 @@
 class Aresta:
 
 	def __init__(self, vertice = 0, peso = 0):
-		self.vertice = vertice
-		self.peso = peso 
+		self.vertice = vertice # vertice em que a aresta conecta
+		self.peso = peso # peso da aresta
 	
-	def zera(self):
+	# faz com que a aresta seja eliminada da lista
+	# de arestas possiveis
+	def elimina(self):
 		self.peso = -1
-
-
 
 class Grafo:
 
-	def __init__(self,lista = []):
-		self.lista = lista
+	def __init__(self,vertices = [],lista = []):
+		self.vertices = vertices# lista de vertices do grafo
+		self.lista = lista# lista de lista de arestas do grafo
 	
+	# coloca um novo vertice no grafo
 	def add(self,lista):
 		self.lista.append(lista)
-		
+	
+	#retorna o custo da bifloresta de menor custo
 	def bifloresta(self):
 		
 		#lista dos vertices percorridos
 		# 0 se nao foi percorrido e 1 se foi 
-		vertices = [0 for i in range(len(self.lista))]
+		vertices = [0 for i in self.lista]
+		#comeca no primeiro vertice
 		vertices[0] = 1
 		
 		#custo total
@@ -39,15 +43,17 @@ class Grafo:
 				menor = 1001
 				indice = 0
 				vertice_menor = 0
-				for i in range(len(vertices)):
+				for i in self.vertices:
 					# se valor eh diferente de zero vertice nao esta na arvore logo nao precisa verificar ele
 					if (vertices[i] != 0):
-						for j in range(len(self.lista[i])):
+						k = 0
+						for j in self.lista[i]:
 							# se eh menor atualiza os valores
-							if (self.lista[i][j].peso < menor and self.lista[i][j].peso != -1):
-								menor = self.lista[i][j].peso
-								indice = j
+							if (j.peso < menor and j.peso != -1):
+								menor = j.peso
+								indice = k
 								vertice_menor = i
+							k += 1
 				
 				# verifica se ja passou pelo vertice da menor aresta 
 				if (vertices[self.lista[vertice_menor][indice].vertice] != 1):
@@ -55,26 +61,32 @@ class Grafo:
 					if (menor > maior):
 						maior = menor 
 					vertices[self.lista[vertice_menor][indice].vertice] = 1
-					self.lista[vertice_menor][indice].peso = -1
+					self.lista[vertice_menor][indice].elimina()
 					achou = 1
 				else:
-					self.lista[vertice_menor][indice].peso = -1
+					self.lista[vertice_menor][indice].elimina()
 	
 		return custo - maior 
 	
 	
 def main():
 	
-	num_vertices = int(input())
+	#lista com vertices do grafo
+	vertices = range(int(input()))
 	
-	grafo = Grafo()
+	grafo = Grafo(vertices)
 	
-	for i in range(num_vertices):
+	#loop para ler as entradas
+	for i in vertices:
+		# le a entrada  e transforma em lista de strings
 		string = input()
 		linha = string.split()
-		grafo.add([Aresta(i,int(linha[i])) for i in range(len(linha)) if int(linha[i]) != -1])
-		
+		# para cada elemento diferente de -1 na lista adiciona como uma aresta na lista de arestas do vertice i
+		grafo.add([Aresta(j,int(linha[j])) for j in vertices if int(linha[j]) != -1])
+
+	#imprime o custo da bifloresta de menor custo	
 	print(grafo.bifloresta())
 	
-	
+
+#inicia a aplicacao
 main()
