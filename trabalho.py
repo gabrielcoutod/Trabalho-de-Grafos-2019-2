@@ -5,10 +5,10 @@ class Aresta:
 		self.vertice = vertice # vertice em que a aresta conecta
 		self.peso = peso # peso da aresta
 	
-	# faz com que a aresta seja eliminada da lista
-	# de arestas possiveis
+	# faz com que a aresta seja eliminada da lista de arestas possiveis
+	# colocando maior valor possivel
 	def elimina(self):
-		self.peso = -1
+		self.peso = 1001
 
 class Grafo:
 
@@ -34,37 +34,37 @@ class Grafo:
 		#maior aresta
 		maior = -1
 		
+		# for para pegar as arestas da arvore
 		for h in range(len(vertices)-1):
-			# acha a menor aresta 
-			achou = 0
 			# verifica a lista ate achar a aresta de menor peso nao conectada na arvore 
-			while(achou == 0):
-				# peso da menor aresta disponivel, e indice dela na lista de arestas do vertice e o vertice que tem essa aresta na lista
-				menor = 1001
-				indice = 0
-				vertice_menor = 0
-				for i in self.vertices:
-					# se valor eh diferente de zero vertice nao esta na arvore logo nao precisa verificar ele
-					if (vertices[i] != 0):
-						k = 0
-						for j in self.lista[i]:
-							# se eh menor atualiza os valores
-							if (j.peso < menor and j.peso != -1):
+			# peso da menor aresta disponivel, e indice dela na lista de arestas do vertice e o vertice que tem essa aresta na lista
+			menor = 1001
+			indice = 0
+			vertice_menor = 0
+			for i in self.vertices:
+				# se valor eh diferente de zero vertice nao esta na arvore logo nao precisa verificar ele
+				if (vertices[i] != 0):
+					k = 0
+					for j in self.lista[i]:
+						# se eh menor atualiza os valores
+						if (j.peso < menor):
+							#verifica se essa aresta conecta em um vertice que nao esta na arvore
+							if (vertices[self.lista[i][k].vertice] != 1):
+								# se nao estiver salva os valores
 								menor = j.peso
 								indice = k
 								vertice_menor = i
-							k += 1
-				
-				# verifica se ja passou pelo vertice da menor aresta 
-				if (vertices[self.lista[vertice_menor][indice].vertice] != 1):
-					custo += menor 
-					if (menor > maior):
-						maior = menor 
-					vertices[self.lista[vertice_menor][indice].vertice] = 1
-					self.lista[vertice_menor][indice].elimina()
-					achou = 1
-				else:
-					self.lista[vertice_menor][indice].elimina()
+							else:
+								# se estiver na arvore elimina essa aresta da lista
+								self.lista[i][k].elimina()
+						k += 1
+			
+			# atualiza custo, maior aresta, coloca o vertice na lista de vertices, elimina a aresta 
+			custo += menor 
+			if (menor > maior):
+				maior = menor 
+			vertices[self.lista[vertice_menor][indice].vertice] = 1
+			self.lista[vertice_menor][indice].elimina()
 	
 		return custo - maior 
 	
