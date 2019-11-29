@@ -1,3 +1,13 @@
+#Trabalho de Grafos 
+
+# Eduardo Eugenio Kussler
+# Gabriel Couto Domingues
+# Thiago Sotoriva Lermen
+
+#Algoritmo: calcula-se o peso da arvore geradora minima 
+# 			com o algoritmo de prim e subtrai do valor 
+#			o peso da aresta de maior peso da AGM
+
 
 class Aresta:
 
@@ -6,7 +16,7 @@ class Aresta:
 		self.peso = peso # peso da aresta
 	
 	# faz com que a aresta seja eliminada da lista de arestas possiveis
-	# colocando maior valor possivel
+	# colocando valor 1001
 	def elimina(self):
 		self.peso = 1001
 
