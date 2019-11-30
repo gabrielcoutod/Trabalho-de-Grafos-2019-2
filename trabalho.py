@@ -8,11 +8,10 @@
 # 			com o algoritmo de prim e subtrai do valor 
 #			o peso da aresta de maior peso da AGM
 
-
 class Aresta:
 
 	def __init__(self, vertice = 0, peso = 0):
-		self.vertice = vertice # vertice em que a aresta conecta
+		self.vertice = vertice # uma das pontas da aresta(outra ponta implicita)
 		self.peso = peso # peso da aresta
 	
 	# faz com que a aresta seja eliminada da lista de arestas possiveis
@@ -24,9 +23,9 @@ class Grafo:
 
 	def __init__(self,vertices = [],lista = []):
 		self.vertices = vertices# lista de vertices do grafo
-		self.lista = lista# lista de lista de arestas do grafo
+		self.lista = lista# lista que contem listas de arestas incidentes a vertices do grafo
 	
-	# coloca um novo vertice no grafo
+	# coloca a lista de arestas incidentes sobre um vertice no grafo
 	def add(self,lista):
 		self.lista.append(lista)
 	
@@ -44,17 +43,19 @@ class Grafo:
 		#maior aresta
 		maior = -1
 		
-		# for para pegar as arestas da arvore
+		# for para pegar as arestas para arvore
 		for h in range(len(vertices)-1):
-			# verifica a lista ate achar a aresta de menor peso nao conectada na arvore 
-			# peso da menor aresta disponivel, e indice dela na lista de arestas do vertice e o vertice que tem essa aresta na lista
-			menor = 1001
-			indice = 0
-			vertice_menor = 0
+
+			menor = 1001 # peso da aresta de menor peso disponivel
+			indice = 0 # indice dela na lista de arestas do vertice
+			vertice_menor = 0 # vertice que tem essa aresta na lista
+
+			# verifica as arestas ate achar a aresta para conectar na arvore 
 			for i in self.vertices:
 				# se valor eh diferente de zero vertice nao esta na arvore logo nao precisa verificar ele
 				if (vertices[i] != 0):
-					k = 0
+					k = 0  #indice da aresta
+					# percorre listas de arestas incidentes
 					for j in self.lista[i]:
 						# se eh menor atualiza os valores
 						if (j.peso < menor):
@@ -84,6 +85,7 @@ def main():
 	#lista com vertices do grafo
 	vertices = range(int(input()))
 	
+	#grafo
 	grafo = Grafo(vertices)
 	
 	#loop para ler as entradas
